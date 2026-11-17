@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Llamascan: the value model</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-page="method">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site shell">
+  <div class="brand">
+    <img src="llama-logo.svg" alt="" width="34" height="34" aria-hidden="true">
+    <span class="wordmark">Llamascan</span>
+  </div>
+  <nav aria-label="Primary">
+    <a href="index.html">Board</a>
+    <a href="coverage.html">Coverage</a>
+    <a href="method.html" aria-current="page">Method</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+<main id="main" class="shell">
+  <h1>The value model</h1>
+  <p class="lede">The board is a claim about what a launch would be worth if a protocol's record stayed as it is. It states the rule openly so a reader can check it against the snapshot.</p>
+  <div class="grid2">
+    <section class="panel">
+      <div class="lbl">THE FITTED RELATIONSHIP</div>
+      <div class="formula">mcap = 10^a x (TVL / $100M)^b x 10^(growth + overdue)</div>
+      <div class="note">The curve is fitted on the protocols that already record a token. Their TVL and market cap are facts in the snapshot. A pre-token protocol is priced by placing its TVL on that line, then shifting by its seven-day TVL change and by the time it has run with no recorded token. No protocol name enters the calculation.</div>
+    </section>
+    <section class="panel">
+      <div class="lbl">FIT FROM THE SNAPSHOT</div>
+      <table class="facts" id="mfit"></table>
+    </section>
+  </div>
+  <div id="mchart"></div>
+  <div class="grid2" style="margin-top:26px">
+    <section class="panel">
+      <div class="lbl">MODEL CONSTANTS</div>
+      <table class="facts" id="mconst"></table>
+    </section>
+    <section class="panel">
+      <div class="lbl">HOW TO READ THE OUTPUT</div>
+      <div class="note">P10 and P90 come from the spread of the fitted line. They bound a range of estimates, not a forecast. Net if launch applies an explicit assumed share of the implied value to a stated position, then subtracts the position. Net per hour divides that by the hours the farm plan takes. The verdict thresholds are stated above and applied uniformly to every row.</div>
+      <div class="note">The snapshot carries TVL, seven-day change, market cap and the day DefiLlama began tracking a protocol. It carries no fee or active-account figures, so none are shown. An on-chain action is never a guarantee of a reward.</div>
+    </section>
+  </div>
+  <footer>
+    <span>Llamascan. An independent estimate from a sealed DefiLlama snapshot.</span>
+    <span>Not financial advice.</span>
+  </footer>
+</main>
+<script src="logos.js"></script>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

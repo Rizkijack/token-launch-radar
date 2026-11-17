@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Llamascan: about this radar</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-page="about">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site shell">
+  <div class="brand">
+    <img src="llama-logo.svg" alt="" width="34" height="34" aria-hidden="true">
+    <span class="wordmark">Llamascan</span>
+  </div>
+  <nav aria-label="Primary">
+    <a href="index.html">Board</a>
+    <a href="coverage.html">Coverage</a>
+    <a href="method.html">Method</a>
+    <a href="about.html" aria-current="page">About</a>
+  </nav>
+</header>
+<main id="main" class="shell">
+  <img class="banner" src="llama-banner.svg" width="1200" height="170" alt="Llamascan, a token launch radar built on DefiLlama data" fetchpriority="high">
+  <h1>About Llamascan</h1>
+  <p class="lede">A scanner for the protocols that may issue a token one day. It reads one sealed DefiLlama snapshot, ranks the pre-token protocols by an implied value and prints a farm plan for each one.</p>
+  <div class="grid2">
+    <section class="panel">
+      <div class="lbl">WHERE THE NUMBERS COME FROM</div>
+      <div class="note">The input is a frozen copy of DefiLlama's public protocols endpoint, taken once when this radar was built. The same bytes are read every time the program runs. Llamascan adds no live network call, so the board cannot change under a reader. Total value locked, seven-day change, the recorded market cap and the first-tracked day are DefiLlama's figures. The ranking, the implied value, the band and the verdict are this radar's own derivations.</div>
+      <div class="note">The word pre-token means that DefiLlama's record carries no token for that protocol. It does not prove that no token exists. A protocol on the watchlist may have a token its record does not carry.</div>
+    </section>
+    <section class="panel">
+      <div class="lbl">HOW TO USE A VERDICT</div>
+      <div class="note">Worth farming means the stated net return per hour clears the higher threshold under the model's explicit assumptions. Marginal means it clears the lower one. Skip means it clears neither. Each verdict is a claim about the estimate, not a promise about a launch or a reward.</div>
+      <div class="note">Open a protocol from the board to see every number behind its rank, the range of the estimate and the eight steps of its farm plan. The Method page prints the full formula and every constant. The Coverage page lists the whole watchlist and the families and chains behind it.</div>
+    </section>
+  </div>
+  <section style="margin-top:26px">
+    <h2>What this radar does not say</h2>
+    <div class="note">It does not predict whether a token will be issued or when. It does not report fees paid or active accounts, because the snapshot does not contain them. It does not recommend an investment. Any on-chain action carries risk, including loss of capital, and the farm plan asks for a small dedicated position precisely for that reason.</div>
+  </section>
+  <footer>
+    <span>Llamascan. An independent estimate from a sealed DefiLlama snapshot.</span>
+    <span>Not financial advice.</span>
+  </footer>
+</main>
+<script src="logos.js"></script>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Llamascan: coverage</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-page="coverage">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site shell">
+  <div class="brand">
+    <img src="llama-logo.svg" alt="" width="34" height="34" aria-hidden="true">
+    <span class="wordmark">Llamascan</span>
+  </div>
+  <nav aria-label="Primary">
+    <a href="index.html">Board</a>
+    <a href="coverage.html" aria-current="page">Coverage</a>
+    <a href="method.html">Method</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+<main id="main" class="shell">
+  <h1>Coverage</h1>
+  <p class="lede">The watchlist is a floor, not a ceiling. It holds every protocol in the snapshot that meets the size rule, records no token in DefiLlama's data and is not a wrapped, staked or bridged product. The board also ranks pre-token protocols below that floor.</p>
+  <div class="grid2">
+    <section class="panel">
+      <div class="lbl">SNAPSHOT FACTS</div>
+      <table class="facts" id="cfacts"></table>
+    </section>
+    <section class="panel">
+      <div class="lbl">PROTOCOL FAMILIES RANKED</div>
+      <div class="bars" id="cfamily"></div>
+    </section>
+  </div>
+  <section style="margin-top:26px">
+    <h2>Chains in the ranked board</h2>
+    <div class="bars" id="cchain"></div>
+  </section>
+  <section style="margin-top:26px">
+    <h2>The full watchlist</h2>
+    <div class="scroll">
+      <table>
+        <caption>Every watchlist protocol, with its TVL, implied value and farm verdict.</caption>
+        <thead><tr><th scope="col">PROTOCOL</th><th class="r" scope="col">TVL</th><th class="r" scope="col">IMPLIED VALUE</th><th class="r" scope="col">VERDICT</th></tr></thead>
+        <tbody id="cwatch"></tbody>
+      </table>
+    </div>
+  </section>
+  <footer>
+    <span>Llamascan. An independent estimate from a sealed DefiLlama snapshot.</span>
+    <span>Not financial advice.</span>
+  </footer>
+</main>
+<script src="logos.js"></script>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

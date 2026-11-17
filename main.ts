@@ -1,18 +1,18 @@
-// LLAMASCAN — a token launch radar for token-radar-01 (Node 22, standard library only).
-//
-// Reads the sealed snapshot, ranks pre-token protocols with the SIGNAL v2 model, and writes a complete
-// entry to /output: board.json, data.js, dashboard/, screenshots/ and dossier.json. The dossier is the
-// one the judge reads, so it is written last from the final /output with the vendored make.fun library.
+// LLAMASCAN entrypoint (Node 22, standard library only).
+// Reads the sealed snapshot, writes a ranked board and a five-page static dashboard, then builds
+// the judge dossier from the final output. The dossier is written last so it matches the bytes
+// the gate reads.
 
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { boardIssue, buildRadar, dataScript, parseSnapshot } from './lib/model.ts';
+import { MODEL, boardIssue, buildRadar, dataScript, parseSnapshot } from './lib/model.ts';
 import { buildDossier } from './vendor/makefun-board.ts';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const TEXT_MAX_BYTES = 65_536;
-const SCREENSHOT_CAPS = { max: 4, max_bytes: 524_288 };
+const IMAGE_CAPS = { max: 4, max_bytes: 524_288 };
+const DASH_CAPS = { max_files: 400, max_bytes: 4_194_304 };
 const IMAGE_NAME = /^[A-Za-z0-9_][A-Za-z0-9._-]{0,127}$/;
 
 function arg(name: string, fallback: string): string {
@@ -32,7 +32,7 @@ const out = arg('output', process.env.MAKEFUN_OUTPUT_DIR ?? '/output');
 
 const snapshot = parseSnapshot(readFileSync(inputFile, 'utf8'));
 const { board, radar } = buildRadar(snapshot);
-const issue = boardIssue(board, snapshot);
+const issue = boardIssue(board, snapshot, MODEL);
 if (issue !== null) {
   process.stderr.write(`llamascan: the model wrote a board the gate refuses: ${issue}\n`);
   process.exit(1);
@@ -42,22 +42,34 @@ mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'board.json'), `${JSON.stringify({ rows: board })}\n`);
 writeFileSync(join(out, 'data.js'), dataScript(radar));
 
-function copyFiles(from: string, to: string): string[] {
+// Copy the whole dashboard tree, including the logos/ folder. Symbolic links are not followed.
+function copyTree(from: string, to: string): string[] {
   if (!existsSync(from)) return [];
   mkdirSync(to, { recursive: true });
   const copied: string[] = [];
   for (const name of readdirSync(from)) {
     if (name.startsWith('.')) continue;
-    const path = join(from, name);
-    if (!statSync(path).isFile()) continue;
-    copyFileSync(path, join(to, name));
-    copied.push(name);
+    const src = join(from, name);
+    const dst = join(to, name);
+    if (statSync(src).isDirectory()) {
+      for (const child of copyTree(src, dst)) copied.push(`${name}/${child}`);
+    } else if (statSync(src).isFile()) {
+      copyFileSync(src, dst);
+      copied.push(name);
+    }
   }
   return copied;
 }
 
-copyFiles(join(here, 'dashboard'), join(out, 'dashboard'));
-const shots = copyFiles(join(here, 'screenshots'), join(out, 'screenshots'));
+const files = copyTree(join(here, 'dashboard'), join(out, 'dashboard'));
+const pageNames = ['index.html', 'protocol.html', 'method.html', 'coverage.html', 'about.html'];
+for (const page of pageNames) {
+  if (!files.includes(page)) {
+    process.stderr.write(`llamascan: dashboard/${page} is missing\n`);
+    process.exit(1);
+  }
+}
+const shots = copyTree(join(here, 'screenshots'), join(out, 'screenshots')).filter((n) => !n.includes('/'));
 if (shots.length < 3) {
   process.stderr.write(`llamascan: ${shots.length} screenshots; need the board, a detail view and a filtered view\n`);
   process.exit(1);
@@ -71,11 +83,12 @@ for (const name of shots) {
 
 writeFileSync(join(out, 'dossier.json'), buildDossier(out, {
   text_max_bytes: TEXT_MAX_BYTES,
-  screenshots: SCREENSHOT_CAPS,
-  dashboard: { max_files: 400, max_bytes: 4_194_304 },
+  screenshots: IMAGE_CAPS,
+  dashboard: DASH_CAPS,
 }));
 
 process.stdout.write(
-  `llamascan: ${snapshot.protocols.length} protocols, ${snapshot.watchlist.length} watchlist, ${board.length} rows (${radar.early_size} early, ${radar.live_size} live)\n` +
-    `llamascan: wrote board.json, data.js, dashboard/, screenshots/ (${shots.length}) and dossier.json to ${out}\n`,
+  `llamascan: ${snapshot.protocols.length} protocols, ${snapshot.watchlist.length} watchlist, ${board.length} rows ` +
+  `(${radar.early_size} early, ${radar.live_size} live)\n` +
+  `llamascan: dashboard ${files.length} files, screenshots ${shots.length}, dossier built in ${out}\n`,
 );

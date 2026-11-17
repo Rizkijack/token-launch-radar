@@ -3,12 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Llamascan — token launch radar</title>
+<title>Llamascan: the pre-token board</title>
 <link rel="stylesheet" href="app.css">
 </head>
-<body>
-<a class="skip" href="#app">Skip to radar</a>
-<div id="app" aria-busy="true"></div>
+<body data-page="index">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site shell">
+  <div class="brand">
+    <img src="llama-logo.svg" alt="" width="34" height="34" aria-hidden="true">
+    <span class="wordmark">Llamascan</span>
+  </div>
+  <nav aria-label="Primary">
+    <a href="index.html" aria-current="page">Board</a>
+    <a href="coverage.html">Coverage</a>
+    <a href="method.html">Method</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+<main id="main" class="shell">
+  <img class="banner" src="llama-banner.svg" width="1200" height="170" alt="Llamascan, a token launch radar built on DefiLlama data" fetchpriority="high">
+  <h1>The pre-token board</h1>
+  <p class="lede">Protocols in DefiLlama's snapshot that record no token, ranked by the value a hypothetical launch would imply. Every figure comes from the sealed snapshot and the model printed beside it. An implied value is this radar's estimate, not a prediction that a token will be issued.</p>
+  <div class="kpis" id="kpis"></div>
+  <div class="duo" id="duo"></div>
+  <section aria-label="Board filters"><div class="ctls" id="ctls"></div></section>
+  <div id="board"></div>
+  <footer>
+    <span>Llamascan. An independent estimate from a sealed DefiLlama snapshot.</span>
+    <span>Not financial advice.</span>
+  </footer>
+</main>
+<script src="logos.js"></script>
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>
